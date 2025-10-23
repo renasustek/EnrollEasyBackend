@@ -21,7 +21,7 @@ dependencies {
     implementation("org.hibernate.validator:hibernate-validator:$hibernate")
     implementation("org.hibernate:hibernate-validator:$hibernate")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-security")
+//    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -32,7 +32,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:$junit")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.h2database:h2")
-    testImplementation("org.springframework.security:spring-security-test:5.7.3")
+//    testImplementation("org.springframework.security:spring-security-test:5.7.3")
 
 }
 

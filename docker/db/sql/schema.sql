@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS `enroll_easy_schema` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `enroll_easy_schema`;
+CREATE DATABASE IF NOT EXISTS `enroll_easy` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `enroll_easy`;
 
 CREATE TABLE members
 (
