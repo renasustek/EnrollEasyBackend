@@ -1,0 +1,52 @@
+package com.enrollEasy.persistance.entites;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.util.UUID;
+
+@Entity
+@Table(name = "enroll_easy", schema = "enroll_easy_schema")
+public class MemberDao{
+    @Id
+    @Column(name = "uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID uuid;
+
+    @Column(name = "username", columnDefinition = "VARCHAR(50)", nullable = false, length = 50)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private String userId;
+
+
+    @Column(name = "paid", columnDefinition = "BOOLEAN", nullable = false)
+    @JdbcTypeCode(SqlTypes.BOOLEAN)
+    private boolean labelId;
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public boolean isLabelId() {
+        return labelId;
+    }
+
+    public void setLabelId(boolean labelId) {
+        this.labelId = labelId;
+    }
+}
