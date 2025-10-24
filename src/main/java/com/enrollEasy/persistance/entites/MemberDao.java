@@ -24,7 +24,7 @@ public class MemberDao{
 
     @Column(name = "paid", columnDefinition = "BOOLEAN", nullable = false)
     @JdbcTypeCode(SqlTypes.BOOLEAN)
-    private boolean labelId;
+    private boolean paidStatus;
 
     public UUID getUuid() {
         return uuid;
@@ -42,11 +42,11 @@ public class MemberDao{
         this.userId = userId;
     }
 
-    public boolean isLabelId() {
-        return labelId;
+    public boolean isPaidStatus() {
+        return paidStatus;
     }
 
-    public void setLabelId(boolean labelId) {
-        this.labelId = labelId;
+    public void setPaidStatus(boolean labelId) {
+        this.paidStatus = labelId;
     }
 }
