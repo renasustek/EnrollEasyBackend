@@ -42,7 +42,7 @@ public class MemberDao{
         this.userId = userId;
     }
 
-    public boolean isPaidStatus() {
+    public boolean getPaidStatus() {
         return paidStatus;
     }
 
