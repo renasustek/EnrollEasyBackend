@@ -1,9 +1,9 @@
 plugins {
-	java
-	id("org.springframework.boot") version "3.5.7"
-	id("io.spring.dependency-management") version "1.1.7"
-    id ("org.sonarqube") version "7.0.1.6134"
-
+    java
+    id("org.springframework.boot") version "3.5.7"
+    id("io.spring.dependency-management") version "1.1.7"
+    id("org.sonarqube") version "7.0.1.6134"
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "com.renasustek"
@@ -35,7 +35,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.h2database:h2")
 //    testImplementation("org.springframework.security:spring-security-test:5.7.3")
-
 }
 
 sonar {
@@ -45,17 +44,28 @@ sonar {
     }
 }
 
+spotless {
+    java {
+        googleJavaFormat()
+        endWithNewline()
+    }
+
+    kotlinGradle {
+        target("*.gradle.kts") // Target your .gradle.kts files
+        ktlint() // Use the ktlint formatter
+    }
+}
+
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
-
 tasks.withType<Test> {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
