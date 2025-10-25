@@ -1,0 +1,55 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  # actions: write  <-- You can remove this line too, it's not needed
+
+jobs:
+  ci:
+    name: Build
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest, macos-latest, windows-latest ]
+        java-version: [ 17, 21 ] # <-- I removed 25, as it's not released
+
+    steps:
+      - name: Set git config for long paths
+        if: matrix.operating-system == 'windows-latest'
+        run: |
+          git config --system core.longpaths true
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Set up JDK ${{ matrix.java-version }}'
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java-version }}
+          cache: 'gradle'
+
+      - name: Check Java version
+        run: java -version
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew build --continue --no-daemon --scan
+      - name: Upload Test reports
+        uses: actions/upload-artifact@v4
+        if: ${{ matrix.operating-system == 'ubuntu-latest' }}
+        with:
+          name: ${{ matrix.operating-system }}-jdk_${{ matrix.java-version }}-test-reports
+          path: |
+            build/test-results/**/*.xml
+            build/jacoco/
