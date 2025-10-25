@@ -40,7 +40,6 @@ public class MemberDao {
     this.userId = userId;
   }
 
-
   public boolean getPaidStatus() {
     return paidStatus;
   }
