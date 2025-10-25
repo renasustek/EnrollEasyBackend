@@ -2,6 +2,8 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.5.7"
 	id("io.spring.dependency-management") version "1.1.7"
+    id ("org.sonarqube") version "7.0.1.6134"
+
 }
 
 group = "com.renasustek"
@@ -34,6 +36,13 @@ dependencies {
     testImplementation("com.h2database:h2")
 //    testImplementation("org.springframework.security:spring-security-test:5.7.3")
 
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "renasustek_EnrollEasyBackend")
+        property("sonar.organization", "renasustek")
+    }
 }
 
 java {
