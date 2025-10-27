@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import java.sql.Date;
 import java.util.UUID;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -16,13 +18,13 @@ public class MemberDao {
   @JdbcTypeCode(SqlTypes.CHAR)
   private UUID uuid;
 
-  @Column(name = "username", columnDefinition = "VARCHAR(50)", nullable = false, length = 50)
+  @Column(name = "membername", columnDefinition = "VARCHAR(50)", nullable = false, length = 50)
   @JdbcTypeCode(SqlTypes.VARCHAR)
-  private String userId;
+  private String memberName;
 
-  @Column(name = "paid", columnDefinition = "BOOLEAN", nullable = false)
-  @JdbcTypeCode(SqlTypes.BOOLEAN)
-  private boolean paidStatus;
+  @Column(name = "membershipvalidtill", columnDefinition = "DATE", nullable = true)
+  @JdbcTypeCode(SqlTypes.DATE)
+  private Date membershipValidTill;
 
   public UUID getUuid() {
     return uuid;
@@ -32,19 +34,19 @@ public class MemberDao {
     this.uuid = uuid;
   }
 
-  public String getUserId() {
-    return userId;
+  public String getMemberName() {
+    return memberName;
   }
 
-  public void setUserId(String userId) {
-    this.userId = userId;
+  public void setMemberName(String userId) {
+    this.memberName = userId;
   }
 
-  public boolean getPaidStatus() {
-    return paidStatus;
+  public Date getMembershipValidTill() {
+    return membershipValidTill;
   }
 
-  public void setPaidStatus(boolean labelId) {
-    this.paidStatus = labelId;
+  public void setMembershipValidTill(Date date) {
+    this.membershipValidTill = date;
   }
 }

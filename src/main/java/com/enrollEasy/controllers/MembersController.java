@@ -26,8 +26,8 @@ public class MembersController {
     return memberService.getMembers();
   }
 
-  @PostMapping("/changePaidStatus")
-  public ResponseEntity<MemberDao> changePaidStatus(@RequestBody PaidStatus paidStatus) {
-    return ResponseEntity.ok(memberService.changePaidStatus(paidStatus));
+  @PostMapping("/memberPaid")
+  public ResponseEntity<MemberDao> memberPaid(@RequestBody PaidStatus paidStatus) {
+    return ResponseEntity.ok(memberService.membershipValidDate(paidStatus));
   }
 }

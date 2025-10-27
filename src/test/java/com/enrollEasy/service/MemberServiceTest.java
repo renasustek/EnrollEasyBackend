@@ -47,18 +47,18 @@ class MemberServiceTest {
     MemberDao memberDao = new MemberDao();
     given(memberRepo.findById(any(UUID.class))).willReturn(Optional.of(memberDao));
     given(memberRepo.save(memberDao)).willReturn(memberDao);
-    MemberDao response = memberService.changePaidStatus(new PaidStatus(UUID.randomUUID(), true));
+    MemberDao response = memberService.membershipValidDate(new PaidStatus(UUID.randomUUID(), true));
 
-    assertThat(response.getPaidStatus()).isEqualTo(true);
+    assertThat(response.getMembershipValidTill()).isEqualTo(true);
   }
 
   @Test
-  void whenChangePaidStatusIdInvalidShouldThrowExepction() {
+  void whenMembershipValidDateIdInvalidShouldThrowExepction() {
     Optional<MemberDao> memberDao = Optional.empty();
     given(memberRepo.findById(any(UUID.class))).willReturn(memberDao);
     assertThatThrownBy(
             () -> {
-              memberService.changePaidStatus(new PaidStatus(UUID.randomUUID(), true));
+              memberService.membershipValidDate(new PaidStatus(UUID.randomUUID(), true));
             })
         .isInstanceOf(MemberNotFoundExpection.class);
   }

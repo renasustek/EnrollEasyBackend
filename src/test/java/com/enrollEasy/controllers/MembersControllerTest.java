@@ -38,7 +38,7 @@ public class MembersControllerTest {
   @Test
   void whenGivenValidIdChangePaidStatusShouldReturnChangedDao() throws Exception {
 
-    given(memberService.changePaidStatus(any(PaidStatus.class))).willReturn(any(MemberDao.class));
+    given(memberService.membershipValidDate(any(PaidStatus.class))).willReturn(any(MemberDao.class));
 
     mockMvc
         .perform(
@@ -55,7 +55,7 @@ public class MembersControllerTest {
   @Test
   void whenGivenInvalidIdChangePaidStatusShould404Error() throws Exception {
 
-    given(memberService.changePaidStatus(any(PaidStatus.class)))
+    given(memberService.membershipValidDate(any(PaidStatus.class)))
         .willThrow(MemberNotFoundExpection.class);
 
     mockMvc
