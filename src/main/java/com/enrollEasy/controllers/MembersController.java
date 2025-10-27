@@ -1,7 +1,8 @@
 package com.enrollEasy.controllers;
 
+import com.enrollEasy.controllers.responses.MemberResponse;
 import com.enrollEasy.persistance.entites.MemberDao;
-import com.enrollEasy.requests.PaidStatus;
+import com.enrollEasy.requests.MembershipDuration;
 import com.enrollEasy.service.MemberService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,12 @@ public class MembersController {
   }
 
   @GetMapping("/getAll")
-  public List<MemberDao> getMember() {
-    return memberService.getMembers();
+  public List<MemberResponse> getAll() {
+    return memberService.getAll();
   }
 
-  @PostMapping("/changePaidStatus")
-  public ResponseEntity<MemberDao> changePaidStatus(@RequestBody PaidStatus paidStatus) {
-    return ResponseEntity.ok(memberService.changePaidStatus(paidStatus));
+  @PostMapping("/memberPaid")
+  public ResponseEntity<MemberDao> logPayment(@RequestBody MembershipDuration membershipDuration) {
+    return ResponseEntity.ok(memberService.logMembershipPayment(membershipDuration));
   }
 }

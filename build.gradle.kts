@@ -1,5 +1,8 @@
 plugins {
     java
+    jacoco
+    `jvm-test-suite`
+    `jacoco-report-aggregation`
     id("org.springframework.boot") version "3.5.7"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.sonarqube") version "7.0.1.6134"
@@ -23,18 +26,39 @@ dependencies {
     implementation("org.hibernate.validator:hibernate-validator:$hibernate")
     implementation("org.hibernate:hibernate-validator:$hibernate")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-mail")
+}
 
-    testImplementation("io.projectreactor:reactor-test")
-    testImplementation("org.assertj:assertj-core:$assertJ")
-    testImplementation("org.junit.jupiter:junit-jupiter:$junit")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("com.h2database:h2")
-//    testImplementation("org.springframework.security:spring-security-test:5.7.3")
+testing {
+    suites {
+        named("test", JvmTestSuite::class) {
+            useJUnitJupiter()
+            dependencies {
+                implementation("io.projectreactor:reactor-test")
+                implementation("org.assertj:assertj-core:$assertJ")
+                implementation("org.junit.jupiter:junit-jupiter:$junit")
+                implementation("org.springframework.boot:spring-boot-starter-test")
+                implementation("com.h2database:h2")
+            }
+        }
+    }
+}
+
+tasks.testCodeCoverageReport {
+    dependsOn(tasks.test)
+    executionData(fileTree(layout.buildDirectory).include("jacoco/*.exec"))
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    mustRunAfter(tasks.spotlessCheck)
+}
+
+tasks.check {
+    dependsOn(tasks.spotlessCheck, tasks.testCodeCoverageReport)
 }
 
 sonar {
@@ -56,16 +80,12 @@ spotless {
     }
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
 repositories {
     mavenCentral()
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }

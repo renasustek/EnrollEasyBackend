@@ -1,11 +1,15 @@
 package com.enrollEasy.service;
 
+import com.enrollEasy.controllers.responses.MemberResponse;
 import com.enrollEasy.exception.MemberNotFoundExpection;
 import com.enrollEasy.persistance.MemberRepo;
 import com.enrollEasy.persistance.entites.MemberDao;
-import com.enrollEasy.requests.PaidStatus;
+import com.enrollEasy.requests.MembershipDuration;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,14 +21,35 @@ public class MemberService {
     this.memberRepo = memberRepo;
   }
 
-  public List<MemberDao> getMembers() {
-    return memberRepo.findAll();
+  public List<MemberResponse> getAll() {
+    return memberRepo.findAll().stream()
+        .map(
+            memberDao -> {
+              return new MemberResponse(
+                  memberDao.getUuid(),
+                  memberDao.getMemberName(),
+                  memberDao.getMembershipValidTill(),
+                  memberDao.getMembershipValidTill() == null
+                      ? false
+                      : memberDao.getMembershipValidTill().after(Date.valueOf(LocalDate.now())));
+            })
+        .collect(Collectors.toList());
   }
 
-  public MemberDao changePaidStatus(PaidStatus paidStatus) {
+  public MemberDao logMembershipPayment(MembershipDuration paidStatus) {
     Optional<MemberDao> member = memberRepo.findById(paidStatus.memberId());
     if (member.isPresent()) {
-      member.get().setPaidStatus(paidStatus.paid());
+      Date currentMembershipDate = member.get().getMembershipValidTill();
+      Date newDate;
+      if (currentMembershipDate == null
+          || currentMembershipDate.before(Date.valueOf(LocalDate.now()))) {
+        newDate = Date.valueOf(LocalDate.now().plusDays(paidStatus.membershipDuration()));
+      } else {
+        newDate =
+            Date.valueOf(
+                currentMembershipDate.toLocalDate().plusDays(paidStatus.membershipDuration()));
+      }
+      member.get().setMembershipValidTill(newDate);
       return memberRepo.save(member.get());
     } else {
       throw new MemberNotFoundExpection();
