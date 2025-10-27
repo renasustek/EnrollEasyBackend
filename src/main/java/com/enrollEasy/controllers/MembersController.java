@@ -1,5 +1,6 @@
 package com.enrollEasy.controllers;
 
+import com.enrollEasy.controllers.responses.MemberResponse;
 import com.enrollEasy.persistance.entites.MemberDao;
 import com.enrollEasy.requests.PaidStatus;
 import com.enrollEasy.service.MemberService;
@@ -22,7 +23,7 @@ public class MembersController {
   }
 
   @GetMapping("/getAll")
-  public List<MemberDao> getMember() {
+  public List<MemberResponse> getMember() {
     return memberService.getMembers();
   }
 

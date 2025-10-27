@@ -1,15 +1,19 @@
 package com.enrollEasy.service;
 
+import com.enrollEasy.controllers.responses.MemberResponse;
 import com.enrollEasy.exception.MemberNotFoundExpection;
 import com.enrollEasy.persistance.MemberRepo;
 import com.enrollEasy.persistance.entites.MemberDao;
 import com.enrollEasy.requests.PaidStatus;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,8 +25,13 @@ public class MemberService {
     this.memberRepo = memberRepo;
   }
 
-  public List<MemberDao> getMembers() {
-    return memberRepo.findAll();
+  public List<MemberResponse> getMembers() {
+
+    return memberRepo.findAll().stream().map(memberDao -> {
+        return new MemberResponse(memberDao.getUuid(), memberDao.getMemberName(), memberDao.getMembershipValidTill(),
+                memberDao.getMembershipValidTill() == null ? false : memberDao.getMembershipValidTill().after(Date.valueOf(LocalDate.now())));
+    }).collect(Collectors.toList());
+
   }
 
   public MemberDao membershipValidDate(PaidStatus paidStatus) {
