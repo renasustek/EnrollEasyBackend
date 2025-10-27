@@ -39,14 +39,15 @@ public class MemberService {
   public MemberDao logMembershipPayment(MembershipDuration paidStatus) {
     Optional<MemberDao> member = memberRepo.findById(paidStatus.memberId());
     if (member.isPresent()) {
-      Date newDate = member.get().getMembershipValidTill();
-      if (newDate == null) {
-        newDate =
-            Date.valueOf(LocalDate.now().plusDays(paidStatus.membershipDuration()));
+      Date currentMembershipDate = member.get().getMembershipValidTill();
+      Date newDate;
+      if (currentMembershipDate == null
+          || currentMembershipDate.before(Date.valueOf(LocalDate.now()))) {
+        newDate = Date.valueOf(LocalDate.now().plusDays(paidStatus.membershipDuration()));
       } else {
         newDate =
             Date.valueOf(
-                newDate.toLocalDate().plusDays(paidStatus.membershipDuration()));
+                currentMembershipDate.toLocalDate().plusDays(paidStatus.membershipDuration()));
       }
       member.get().setMembershipValidTill(newDate);
       return memberRepo.save(member.get());

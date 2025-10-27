@@ -13,13 +13,11 @@ import com.enrollEasy.exception.MemberNotFoundExpection;
 import com.enrollEasy.persistance.entites.MemberDao;
 import com.enrollEasy.requests.MembershipDuration;
 import com.enrollEasy.service.MemberService;
-
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -35,21 +33,25 @@ public class MembersControllerTest {
   @MockitoBean private MemberService memberService;
 
   private UUID uuid = UUID.randomUUID();
-  private MemberResponse memberResponse = new MemberResponse(uuid, "test", Date.valueOf(LocalDate.now()), true);
+  private MemberResponse memberResponse =
+      new MemberResponse(uuid, "test", Date.valueOf(LocalDate.now()), true);
 
   @Test
   void getAllMembers() throws Exception {
     List<MemberResponse> mockList = new ArrayList<>();
-      mockList.add(memberResponse);
+    mockList.add(memberResponse);
 
     given(memberService.getAll()).willReturn(mockList);
 
-      mockMvc.perform(get("/members/getAll"))
-              .andExpect(status().isOk())
-              .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-              .andExpect(jsonPath("$[0].uuid").value(memberResponse.uuid().toString()))
-              .andExpect(jsonPath("$[0].memberName").value(memberResponse.memberName().toString()))
-              .andExpect(jsonPath("$[0].membershipValidTill").value(memberResponse.membershipValidTill().toString()));
+    mockMvc
+        .perform(get("/members/getAll"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$[0].uuid").value(memberResponse.uuid().toString()))
+        .andExpect(jsonPath("$[0].memberName").value(memberResponse.memberName().toString()))
+        .andExpect(
+            jsonPath("$[0].membershipValidTill")
+                .value(memberResponse.membershipValidTill().toString()));
   }
 
   @Test
